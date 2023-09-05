@@ -27,6 +27,9 @@ int main(int argc, char *args[]) {
   // Update the surface
   SDL_UpdateWindowSurface(window);
 
+  // Game Setup
+  GameScene gameScene{10, 10};
+
   // Hack to get window to stay up
   SDL_Event e;
   bool quit = false;
@@ -34,7 +37,10 @@ int main(int argc, char *args[]) {
     while (SDL_PollEvent(&e)) {
       if (e.type == SDL_QUIT)
         quit = true;
+      // Temporary to ensure scene is running
+      gameScene.Update(e);
     }
+    gameScene.Render();
   }
   // Destroy window
   SDL_DestroyWindow(window);

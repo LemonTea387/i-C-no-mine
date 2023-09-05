@@ -11,6 +11,9 @@ find_package(SDL2 REQUIRED)
 
 add_executable(i-c-no-mine 
   src/main.cpp
+  src/GameBoard.cpp
+  src/Scene/Scene.cpp
+  src/Scene/GameScene.cpp
   )
 
 include_directories(SDL2::Headers)
