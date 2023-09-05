@@ -7,6 +7,7 @@
 #include <stdio.h>
 
 #include "Constants.hpp"
+#include "Scene/GameScene.hpp"
 
 int initSDL(SDL_Window **window);
 
@@ -22,7 +23,6 @@ int main(int argc, char *args[]) {
 
   // Get window surface
   screenSurface = SDL_GetWindowSurface(window);
-
 
   // Update the surface
   SDL_UpdateWindowSurface(window);
