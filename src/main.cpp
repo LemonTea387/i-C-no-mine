@@ -51,9 +51,10 @@ int initSDL(SDL_Window **window) {
     return -1;
   }
   // Create window
-  *window = SDL_CreateWindow("i-C-no-mine", SDL_WINDOWPOS_UNDEFINED,
-                             SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH,
-                             SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+  *window =
+      SDL_CreateWindow(Constants::GAME_TITLE.c_str(), SDL_WINDOWPOS_UNDEFINED,
+                       SDL_WINDOWPOS_UNDEFINED, Constants::SCREEN_WIDTH,
+                       Constants::SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
   if (window == NULL) {
     printf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
     return -1;
