@@ -8,6 +8,7 @@ project(
   )
 
 find_package(SDL2 REQUIRED)
+find_package(SDL2_image REQUIRED)
 
 add_executable(i-c-no-mine 
   src/main.cpp
@@ -17,6 +18,6 @@ add_executable(i-c-no-mine
   )
 
 include_directories(SDL2::Headers)
+include_directories(SDL2_image::Headers)
 target_link_libraries( i-c-no-mine PRIVATE
-  SDL2::SDL2)
-
+  SDL2::SDL2 SDL2_image::SDL2_image)
