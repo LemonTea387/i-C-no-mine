@@ -1,5 +1,6 @@
 #include <SDL.h>
 #include <SDL_error.h>
+#include <SDL_render.h>
 #include <SDL_surface.h>
 #undef main
 
@@ -15,22 +16,19 @@ int main(int argc, char *args[]) {
   // The window we'll be rendering to
   SDL_Window *window = NULL;
 
-  // The surface contained by the window
-  SDL_Surface *screenSurface = NULL;
-
   if (initSDL(&window))
     return -1;
 
-  // Get window surface
-  screenSurface = SDL_GetWindowSurface(window);
-
-  // Update the surface
-  SDL_UpdateWindowSurface(window);
+  SDL_Renderer *renderer =
+      SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+  if (renderer == NULL) {
+    printf("Renderer could not be created! SDL Error: %s\n", SDL_GetError());
+    return -1;
+  }
 
   // Game Setup
   GameScene gameScene{10, 10};
 
-  // Hack to get window to stay up
   SDL_Event e;
   bool quit = false;
   while (quit == false) {
@@ -38,9 +36,17 @@ int main(int argc, char *args[]) {
       if (e.type == SDL_QUIT)
         quit = true;
       // Temporary to ensure scene is running
-      gameScene.Update(e);
+      // gameScene.Update(e);
     }
-    gameScene.Render();
+    // Clear screen
+    SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF);
+    SDL_RenderClear(renderer);
+    SDL_Rect fillRect{Constants::SCREEN_WIDTH / 4, Constants::SCREEN_HEIGHT / 4, Constants::SCREEN_WIDTH / 2,
+                         Constants::SCREEN_HEIGHT / 2};
+    SDL_SetRenderDrawColor(renderer, 0xFF, 0x00, 0x00, 0xFF);
+    SDL_RenderFillRect(renderer, &fillRect);
+    SDL_RenderPresent(renderer);
+    // gameScene.Render();
   }
   // Destroy window
   SDL_DestroyWindow(window);

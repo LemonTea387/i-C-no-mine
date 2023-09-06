@@ -2,7 +2,8 @@
 #define GAMEBOARD_H
 
 #include "Tile.hpp"
-#include <memory>
+#include <utility>
+#include <vector>
 
 class GameBoard {
 public:
@@ -21,7 +22,8 @@ public:
   void operator=(const GameBoard &) = delete;
 
 private:
-  std::unique_ptr<Tile> m_Board;
+  std::vector<Tile> m_Board;
+  std::pair<int, int> m_Dimension;
 };
 
 #endif

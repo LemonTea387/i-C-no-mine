@@ -9,7 +9,7 @@ public:
   GameScene(int sizeX, int sizeY);
   ~GameScene();
   virtual void Update(const SDL_Event &event) override;
-  virtual void Render() override;
+  virtual void Render(SDL_Renderer &renderer) override;
 
 private:
   GameBoard m_GameBoard;
