@@ -1,11 +1,15 @@
 #ifndef GAMEBOARD_H
 #define GAMEBOARD_H
 
+#include "GameObject.hpp"
 #include "Tile.hpp"
 #include <utility>
 #include <vector>
 
-class GameBoard {
+class GameBoard : public GameObject {
+  static const int TILE_SIZE_X = 10;
+  static const int TILE_SIZE_Y = 10;
+
 public:
   GameBoard(int sizeX, int sizeY);
   ~GameBoard();
@@ -20,6 +24,8 @@ public:
    * don't want to be able to assign it to another.
    */
   void operator=(const GameBoard &) = delete;
+
+  virtual void render(SDL_Renderer &renderer) const;
 
 private:
   std::vector<Tile> m_Board;

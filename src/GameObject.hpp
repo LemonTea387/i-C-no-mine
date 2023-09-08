@@ -7,7 +7,7 @@ class GameObject {
 public:
   GameObject();
   ~GameObject();
-  virtual void render(SDL_Renderer *renderer) const;
+  virtual void render(SDL_Renderer &renderer) const;
   SDL_Rect getBounds() const { return m_Bounds; };
 
 private:
