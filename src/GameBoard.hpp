@@ -25,7 +25,8 @@ public:
    */
   void operator=(const GameBoard &) = delete;
 
-  virtual void render(SDL_Renderer &renderer) const;
+  virtual void render(SDL_Renderer &renderer) const override;
+  virtual void update(const SDL_Event &event) override;
 
 private:
   std::vector<Tile> m_Board;
