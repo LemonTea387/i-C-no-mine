@@ -20,7 +20,7 @@ int main(int argc, char *args[]) {
     return -1;
 
   SDL_Renderer *renderer =
-      SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+      SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED|SDL_RENDERER_PRESENTVSYNC);
   if (renderer == NULL) {
     printf("Renderer could not be created! SDL Error: %s\n", SDL_GetError());
     return -1;
@@ -41,12 +41,8 @@ int main(int argc, char *args[]) {
     // Clear screen
     SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF);
     SDL_RenderClear(renderer);
-    SDL_Rect fillRect{Constants::SCREEN_WIDTH / 4, Constants::SCREEN_HEIGHT / 4, Constants::SCREEN_WIDTH / 2,
-                         Constants::SCREEN_HEIGHT / 2};
-    SDL_SetRenderDrawColor(renderer, 0xFF, 0x00, 0x00, 0xFF);
-    SDL_RenderFillRect(renderer, &fillRect);
+    gameScene.Render(*renderer);
     SDL_RenderPresent(renderer);
-    // gameScene.Render();
   }
   // Destroy window
   SDL_DestroyWindow(window);
