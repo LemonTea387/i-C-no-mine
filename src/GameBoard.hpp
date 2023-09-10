@@ -3,7 +3,6 @@
 
 #include "GameObject.hpp"
 #include "Tile.hpp"
-#include <utility>
 #include <vector>
 
 class GameBoard : public GameObject {
@@ -32,5 +31,11 @@ private:
   std::vector<Tile> m_Board;
   std::pair<int, int> m_Dimension;
 };
+
+namespace GameBoardUtil {
+std::pair<int, int> resolveCoordinateToTile(int x, int y,
+                                            std::pair<int, int> tileDimension);
+bool withinRange(int x, int y, SDL_Rect box);
+}
 
 #endif
