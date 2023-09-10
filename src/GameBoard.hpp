@@ -7,8 +7,8 @@
 #include <vector>
 
 class GameBoard : public GameObject {
-  static const int TILE_SIZE_X = 10;
-  static const int TILE_SIZE_Y = 10;
+  static const int TILE_SIZE_X = 25;
+  static const int TILE_SIZE_Y = 25;
 
 public:
   GameBoard(int sizeX, int sizeY);
