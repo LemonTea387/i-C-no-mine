@@ -19,8 +19,8 @@ int main(int argc, char *args[]) {
   if (initSDL(&window))
     return -1;
 
-  SDL_Renderer *renderer =
-      SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED|SDL_RENDERER_PRESENTVSYNC);
+  SDL_Renderer *renderer = SDL_CreateRenderer(
+      window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
   if (renderer == NULL) {
     printf("Renderer could not be created! SDL Error: %s\n", SDL_GetError());
     return -1;
@@ -35,8 +35,7 @@ int main(int argc, char *args[]) {
     while (SDL_PollEvent(&e)) {
       if (e.type == SDL_QUIT)
         quit = true;
-      // Temporary to ensure scene is running
-      // gameScene.Update(e);
+      gameScene.Update(e);
     }
     // Clear screen
     SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF);
