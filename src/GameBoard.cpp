@@ -26,6 +26,9 @@ void GameBoard::reset() {
     tile.hasMine = false;
     tile.mineNumber = 0;
   }
+  // Scatter Mines
+  placeMines(m_Board.size() / 5);
+  gameEnded = false;
 }
 
 void GameBoard::placeMines(int numMines) {
