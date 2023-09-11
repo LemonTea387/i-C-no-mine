@@ -30,6 +30,7 @@ public:
 private:
   std::vector<Tile> m_Board;
   std::pair<int, int> m_Dimension;
+  SDL_Rect m_ActualBoardRect;
 };
 
 namespace GameBoardUtil {

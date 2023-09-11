@@ -2,7 +2,11 @@
 
 #include "Scene/GameScene.hpp"
 
-GameBoard::GameBoard(int sizeX, int sizeY) : m_Dimension{sizeX, sizeY} {
+GameBoard::GameBoard(int sizeX, int sizeY)
+    : m_Dimension{sizeX, sizeY},
+      m_ActualBoardRect{gameboardArea.x, gameboardArea.y,
+                        m_Dimension.first * TILE_SIZE_X,
+                        m_Dimension.second * TILE_SIZE_Y} {
   // Setup the board
   for (int i = 0; i < sizeX * sizeY; i++) {
     m_Board.push_back(Tile{false, 0});
