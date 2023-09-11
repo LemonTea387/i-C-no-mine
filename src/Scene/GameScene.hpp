@@ -17,7 +17,7 @@ private:
   GameBoard m_GameBoard;
 };
 
-const SDL_Rect gameboardArea{25, 25, Constants::SCREEN_WIDTH - 50,
-                             Constants::SCREEN_HEIGHT - 50};
+const SDL_Rect gameboardArea{25, 25, Constants::SCREEN_WIDTH - 25,
+                             Constants::SCREEN_HEIGHT - 25};
 
 #endif

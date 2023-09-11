@@ -1,8 +1,5 @@
 #include "GameScene.hpp"
 
-#include "../Constants.hpp"
-#include <SDL_render.h>
-
 GameScene::GameScene(int sizeX, int sizeY) : m_GameBoard(sizeX, sizeY) {}
 
 GameScene::~GameScene() {}

@@ -33,9 +33,10 @@ private:
 };
 
 namespace GameBoardUtil {
-std::pair<int, int> resolveCoordinateToTile(int x, int y,
-                                            std::pair<int, int> tileDimension);
-bool withinRange(int x, int y, SDL_Rect box);
-}
+std::pair<int, int> resolveCoordinateToTile(int x, int y, int tileSizeX,
+                                            int tileSizeY,
+                                            const SDL_Rect &actualBoardRect);
+bool withinRange(int x, int y, const SDL_Rect &box);
+} // namespace GameBoardUtil
 
 #endif
