@@ -17,10 +17,17 @@ GameBoard::~GameBoard() {}
 
 void GameBoard::render(SDL_Renderer &renderer) const {
   SDL_Rect tileRect{0, 0, TILE_SIZE_X, TILE_SIZE_Y};
-  SDL_SetRenderDrawColor(&renderer, 160, 160, 160, 255);
   for (int i = 0; i < m_Board.size(); i++) {
     tileRect.x = (i % m_Dimension.first) * TILE_SIZE_X;
     tileRect.y = (i / m_Dimension.first) * TILE_SIZE_Y;
+    auto &tile = m_Board[i];
+    if (tile.revealed) {
+      SDL_SetRenderDrawColor(&renderer, 224, 224, 224, 255);
+    } else {
+      SDL_SetRenderDrawColor(&renderer, 128, 128, 128, 255);
+    }
+    SDL_RenderFillRect(&renderer, &tileRect);
+    SDL_SetRenderDrawColor(&renderer, 32, 32, 32, 255);
     SDL_RenderDrawRect(&renderer, &tileRect);
   }
 }
@@ -38,9 +45,10 @@ void GameBoard::update(const SDL_Event &event) {
       event.button.x, event.button.y, TILE_SIZE_X, TILE_SIZE_Y,
       m_ActualBoardRect);
   // y * DimX + x
-  auto tile = m_Board[tileCoord.second * m_Dimension.first + tileCoord.first];
+  auto &tile = m_Board[tileCoord.second * m_Dimension.first + tileCoord.first];
 
   // Different cases of the tile
+  tile.revealed = true;
 }
 
 namespace GameBoardUtil {
