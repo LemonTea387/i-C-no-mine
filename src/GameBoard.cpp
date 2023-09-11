@@ -26,17 +26,21 @@ void GameBoard::render(SDL_Renderer &renderer) const {
 }
 
 void GameBoard::update(const SDL_Event &event) {
-  if (event.type == SDL_MOUSEBUTTONUP) {
-    SDL_Rect actualBoardRect{gameboardArea.x, gameboardArea.y,
-                             m_Dimension.first * TILE_SIZE_X,
-                             m_Dimension.second * TILE_SIZE_Y};
-    if (GameBoardUtil::withinRange(event.button.x, event.button.y,
-                                   actualBoardRect)) {
-      auto tile = GameBoardUtil::resolveCoordinateToTile(
-          event.button.x, event.button.y, TILE_SIZE_X, TILE_SIZE_Y,
-          actualBoardRect);
-    }
+  if (!(event.type == SDL_MOUSEBUTTONUP)) {
+    return;
   }
+  if (!GameBoardUtil::withinRange(event.button.x, event.button.y,
+                                  m_ActualBoardRect)) {
+    return;
+  }
+
+  auto tileCoord = GameBoardUtil::resolveCoordinateToTile(
+      event.button.x, event.button.y, TILE_SIZE_X, TILE_SIZE_Y,
+      m_ActualBoardRect);
+  // y * DimX + x
+  auto tile = m_Board[tileCoord.second * m_Dimension.first + tileCoord.first];
+
+  // Different cases of the tile
 }
 
 namespace GameBoardUtil {
