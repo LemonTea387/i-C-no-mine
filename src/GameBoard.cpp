@@ -1,19 +1,51 @@
 #include "GameBoard.hpp"
 
 #include "Scene/GameScene.hpp"
+#include <cstdlib> /* rand */
 
 GameBoard::GameBoard(int sizeX, int sizeY)
     : m_Dimension{sizeX, sizeY},
       m_ActualBoardRect{gameboardArea.x, gameboardArea.y,
                         m_Dimension.first * TILE_SIZE_X,
-                        m_Dimension.second * TILE_SIZE_Y} {
+                        m_Dimension.second * TILE_SIZE_Y},
+      gameEnded{false} {
   // Setup the board
   for (int i = 0; i < sizeX * sizeY; i++) {
-    m_Board.push_back(Tile{false, 0});
+    m_Board.push_back(Tile{false, false, 0});
   }
+
+  // Scatter Mines
+  placeMines(m_Board.size() / 5);
 }
 
 GameBoard::~GameBoard() {}
+
+void GameBoard::reset() {
+  for (auto &tile : m_Board) {
+    tile.revealed = false;
+    tile.hasMine = false;
+    tile.mineNumber = 0;
+  }
+}
+
+void GameBoard::placeMines(int numMines) {
+  int minesPlaced = 0;
+  while (minesPlaced < numMines) {
+    // 1) Select a random tile
+    // 2) Place Mine if possible, if not, continue placing
+    // 3) Increment number of neighbouring tiles
+    // 4) Profit?
+    int i = std::rand() % m_Board.size();
+    if (m_Board[i].hasMine)
+      continue;
+
+    m_Board[i].hasMine = true;
+    minesPlaced++;
+    incrementNeighbours(i % m_Dimension.first, i / m_Dimension.first);
+  }
+}
+
+void GameBoard::incrementNeighbours(int x, int y) {}
 
 void GameBoard::render(SDL_Renderer &renderer) const {
   SDL_Rect tileRect{0, 0, TILE_SIZE_X, TILE_SIZE_Y};
