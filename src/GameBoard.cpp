@@ -1,7 +1,7 @@
 #include "GameBoard.hpp"
 
 #include "Scene/GameScene.hpp"
-#include <cstdlib>  /* rand */
+#include <cstdlib> /* rand */
 #include <stdlib.h> /* srand */
 #include <time.h>   /* time */
 
@@ -51,7 +51,36 @@ void GameBoard::placeMines(int numMines) {
   }
 }
 
-void GameBoard::incrementNeighbours(int x, int y) {}
+void GameBoard::incrementNeighbours(int x, int y) {
+  // 1) Iterate through the 8 closest neighbours and increment their numbers
+  int i = 0;
+  int sizeX = m_Dimension.first;
+  int sizeY = m_Dimension.second;
+  i = GameBoardUtil::translateCoordinate(x - 1, y - 1, sizeX, sizeY);
+  if (i >= 0)
+    m_Board[i].mineNumber += 1;
+  i = GameBoardUtil::translateCoordinate(x, y - 1, sizeX, sizeY);
+  if (i >= 0)
+    m_Board[i].mineNumber += 1;
+  i = GameBoardUtil::translateCoordinate(x + 1, y - 1, sizeX, sizeY);
+  if (i >= 0)
+    m_Board[i].mineNumber += 1;
+  i = GameBoardUtil::translateCoordinate(x - 1, y, sizeX, sizeY);
+  if (i >= 0)
+    m_Board[i].mineNumber += 1;
+  i = GameBoardUtil::translateCoordinate(x + 1, y, sizeX, sizeY);
+  if (i >= 0)
+    m_Board[i].mineNumber += 1;
+  i = GameBoardUtil::translateCoordinate(x - 1, y + 1, sizeX, sizeY);
+  if (i >= 0)
+    m_Board[i].mineNumber += 1;
+  i = GameBoardUtil::translateCoordinate(x, y + 1, sizeX, sizeY);
+  if (i >= 0)
+    m_Board[i].mineNumber += 1;
+  i = GameBoardUtil::translateCoordinate(x + 1, y + 1, sizeX, sizeY);
+  if (i >= 0)
+    m_Board[i].mineNumber += 1;
+}
 
 void GameBoard::render(SDL_Renderer &renderer) const {
   SDL_Rect tileRect{0, 0, TILE_SIZE_X, TILE_SIZE_Y};
@@ -104,4 +133,13 @@ std::pair<int, int> resolveCoordinateToTile(int x, int y, int tileSizeX,
 bool withinRange(int x, int y, const SDL_Rect &box) {
   return x >= box.x && x <= box.x + box.w && y >= box.y && y <= box.y + box.h;
 }
+
+int translateCoordinate(int x, int y, int sizeX, int sizeY) {
+  // Gives negative index if it's invalid.
+  if ((x < 0 || y < 0) || (x >= sizeX || y >= sizeY)) {
+    return -1;
+  }
+  return y * sizeX + x;
+}
+
 } // namespace GameBoardUtil

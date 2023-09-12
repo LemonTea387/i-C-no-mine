@@ -42,6 +42,6 @@ std::pair<int, int> resolveCoordinateToTile(int x, int y, int tileSizeX,
                                             int tileSizeY,
                                             const SDL_Rect &actualBoardRect);
 bool withinRange(int x, int y, const SDL_Rect &box);
+int translateCoordinate(int x, int y, int sizeX, int sizeY);
 } // namespace GameBoardUtil
-
 #endif
