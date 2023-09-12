@@ -10,6 +10,7 @@ class GameBoard : public GameObject {
   static const int TILE_SIZE_Y = 25;
 
 public:
+  bool gameEnded;
   GameBoard(int sizeX, int sizeY);
   ~GameBoard();
   /**
@@ -23,6 +24,7 @@ public:
    * don't want to be able to assign it to another.
    */
   void operator=(const GameBoard &) = delete;
+  void reset();
 
   virtual void render(SDL_Renderer &renderer) const override;
   virtual void update(const SDL_Event &event) override;
@@ -31,6 +33,8 @@ private:
   std::vector<Tile> m_Board;
   std::pair<int, int> m_Dimension;
   SDL_Rect m_ActualBoardRect;
+  void placeMines(int numMines);
+  void incrementNeighbours(int x, int y);
 };
 
 namespace GameBoardUtil {
