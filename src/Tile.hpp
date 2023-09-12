@@ -4,6 +4,7 @@
 #include <stdint.h>
 typedef struct {
   bool hasMine;
+  bool revealed;
   uint8_t mineNumber;
 } Tile;
 
