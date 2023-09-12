@@ -83,6 +83,10 @@ void GameBoard::update(const SDL_Event &event) {
   auto &tile = m_Board[tileCoord.second * m_Dimension.first + tileCoord.first];
 
   // Different cases of the tile
+  if (tile.hasMine) {
+    gameEnded = true;
+    return;
+  }
   tile.revealed = true;
 }
 
