@@ -1,7 +1,9 @@
 #include "GameBoard.hpp"
 
 #include "Scene/GameScene.hpp"
-#include <cstdlib> /* rand */
+#include <cstdlib>  /* rand */
+#include <stdlib.h> /* srand */
+#include <time.h>   /* time */
 
 GameBoard::GameBoard(int sizeX, int sizeY)
     : m_Dimension{sizeX, sizeY},
@@ -32,6 +34,7 @@ void GameBoard::reset() {
 }
 
 void GameBoard::placeMines(int numMines) {
+  srand(time(NULL));
   int minesPlaced = 0;
   while (minesPlaced < numMines) {
     // 1) Select a random tile
