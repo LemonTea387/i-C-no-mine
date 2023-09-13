@@ -7,8 +7,26 @@ project(
   LANGUAGES CXX
   )
 
-find_package(SDL2 REQUIRED)
-find_package(SDL2_image REQUIRED)
+include(FetchContent)
+
+# sdl2
+FetchContent_Declare(
+    SDL2
+    GIT_REPOSITORY  https://github.com/libsdl-org/SDL
+    GIT_TAG         release-2.28.3
+    GIT_PROGRESS    TRUE
+)
+
+# sdl2_image
+FetchContent_Declare(
+    SDL2_image
+    GIT_REPOSITORY  https://github.com/libsdl-org/SDL_image
+    GIT_TAG         release-2.6.3
+    GIT_PROGRESS    TRUE
+)
+set(SDL2IMAGE_SAMPLES OFF)
+set(SDL2IMAGE_INSTALL OFF)
+FetchContent_MakeAvailable(SDL2 SDL2_image)
 
 add_executable(i-c-no-mine 
   src/main.cpp
@@ -16,8 +34,5 @@ add_executable(i-c-no-mine
   src/Scene/Scene.cpp
   src/Scene/GameScene.cpp
   )
-
-include_directories(SDL2::Headers)
-include_directories(SDL2_image::Headers)
 target_link_libraries( i-c-no-mine PRIVATE
-  SDL2::SDL2 SDL2_image::SDL2_image)
+  SDL2::SDL2main SDL2::SDL2 SDL2_image::SDL2_image)
