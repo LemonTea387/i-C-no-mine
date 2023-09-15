@@ -26,7 +26,17 @@ FetchContent_Declare(
 )
 set(SDL2IMAGE_SAMPLES OFF)
 set(SDL2IMAGE_INSTALL OFF)
-FetchContent_MakeAvailable(SDL2 SDL2_image)
+
+# sdl2_ttf
+FetchContent_Declare(
+    SDL2_ttf
+    GIT_REPOSITORY  https://github.com/libsdl-org/SDL_ttf
+    GIT_TAG         release-2.20.2
+    GIT_PROGRESS    TRUE
+)
+set(SDL2TTF_SAMPLES OFF)
+set(SDL2TTF_INSTALL OFF)
+FetchContent_MakeAvailable(SDL2 SDL2_image SDL2_ttf)
 
 add_executable(i-c-no-mine 
   src/main.cpp
@@ -35,4 +45,4 @@ add_executable(i-c-no-mine
   src/Scene/GameScene.cpp
   )
 target_link_libraries( i-c-no-mine PRIVATE
-  SDL2::SDL2main SDL2::SDL2 SDL2_image::SDL2_image)
+  SDL2::SDL2main SDL2::SDL2 SDL2_image::SDL2_image SDL2_ttf::SDL2_ttf)
