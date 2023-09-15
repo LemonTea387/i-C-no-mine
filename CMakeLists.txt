@@ -43,6 +43,8 @@ add_executable(i-c-no-mine
   src/GameBoard.cpp
   src/Scene/Scene.cpp
   src/Scene/GameScene.cpp
+  src/Text.cpp
+  src/AssetManager.cpp
   )
 target_link_libraries( i-c-no-mine PRIVATE
   SDL2::SDL2main SDL2::SDL2 SDL2_image::SDL2_image SDL2_ttf::SDL2_ttf)
