@@ -41,3 +41,7 @@ build*/
 # Clangd
 .cache
 compile_commands.json
+
+# Clang Power tools
+clang-build.ps1
+psClang
