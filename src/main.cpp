@@ -27,7 +27,7 @@ int main(int argc, char *args[]) {
   }
 
   // Game Setup
-  GameScene gameScene{10, 10};
+  GameScene gameScene{25, 20};
 
   SDL_Event e;
   bool quit = false;
@@ -47,6 +47,7 @@ int main(int argc, char *args[]) {
   SDL_DestroyWindow(window);
 
   // Quit SDL subsystems
+  TTF_Quit();
   SDL_Quit();
   return 0;
 }
@@ -55,6 +56,11 @@ int initSDL(SDL_Window **window) {
   // Initialize SDL
   if (SDL_Init(SDL_INIT_VIDEO) < 0) {
     printf("SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
+    return -1;
+  }
+  // Initialize SDL_ttf
+  if (TTF_Init() == -1) {
+    printf("SDL_ttf could not initialize! SDL_ttf Error: %s\n", TTF_GetError());
     return -1;
   }
   // Create window
