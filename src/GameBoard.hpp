@@ -2,6 +2,7 @@
 #define GAMEBOARD_H
 
 #include "GameObject.hpp"
+#include "Text.hpp"
 #include "Tile.hpp"
 #include <vector>
 
