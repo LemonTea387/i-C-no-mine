@@ -26,7 +26,7 @@ public:
   void operator=(const GameBoard &) = delete;
   void reset();
 
-  virtual void render(SDL_Renderer &renderer) const override;
+  virtual void render(SDL_Renderer &renderer) override;
   virtual void update(const SDL_Event &event) override;
 
 private:
