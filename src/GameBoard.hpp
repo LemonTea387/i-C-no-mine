@@ -37,6 +37,7 @@ private:
   SDL_Rect m_ActualBoardRect;
   void placeMines(int numMines);
   void incrementNeighbours(int x, int y);
+  void revealAdjacentEmptyNeighbours(int x, int y);
 };
 
 namespace GameBoardUtil {

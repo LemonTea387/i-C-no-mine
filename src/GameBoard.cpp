@@ -135,7 +135,85 @@ void GameBoard::update(const SDL_Event &event) {
     gameEnded = true;
     return;
   }
+  if (tile.mineNumber == 0) {
+    // We wanna reveal the adjacent 'empty' tiles
+    revealAdjacentEmptyNeighbours(tileCoord.first, tileCoord.second);
+  }
   tile.revealed = true;
+}
+
+void GameBoard::revealAdjacentEmptyNeighbours(int x, int y) {
+  // A dumbed down version of BFS is sufficient.
+  // Stop adding when encountering revealed/mine
+  std::vector<std::pair<int, int>> queue{};
+  int i = 0;
+  int sizeX = m_Dimension.first;
+  int sizeY = m_Dimension.second;
+  // The 4 directions first
+  // Left
+  i = GameBoardUtil::translateCoordinate(x - 1, y, sizeX, sizeY);
+  if (i >= 0 && (!m_Board[i].revealed &&
+                 (m_Board[i].mineNumber == 0 && !m_Board[i].hasMine))) {
+    m_Board[i].revealed = true;
+    queue.push_back({x - 1, y});
+  }
+  // top
+  i = GameBoardUtil::translateCoordinate(x, y - 1, sizeX, sizeY);
+  if (i >= 0 && (!m_Board[i].revealed &&
+                 (m_Board[i].mineNumber == 0 && !m_Board[i].hasMine))) {
+    m_Board[i].revealed = true;
+    queue.push_back({x, y - 1});
+  }
+  // Right
+  i = GameBoardUtil::translateCoordinate(x + 1, y, sizeX, sizeY);
+  if (i >= 0 && (!m_Board[i].revealed &&
+                 (m_Board[i].mineNumber == 0 && !m_Board[i].hasMine))) {
+    m_Board[i].revealed = true;
+    queue.push_back({x + 1, y});
+  }
+  // bottom
+  i = GameBoardUtil::translateCoordinate(x, y + 1, sizeX, sizeY);
+  if (i >= 0 && (!m_Board[i].revealed &&
+                 (m_Board[i].mineNumber == 0 && !m_Board[i].hasMine))) {
+    m_Board[i].revealed = true;
+    queue.push_back({x, y + 1});
+  }
+
+  int processed = 0;
+  int currX, currY;
+  while (processed != queue.size()) {
+    currX = queue[processed].first;
+    currY = queue[processed].second;
+    // Left
+    i = GameBoardUtil::translateCoordinate(currX - 1, currY, sizeX, sizeY);
+    if (i >= 0 && (!m_Board[i].revealed &&
+                   (m_Board[i].mineNumber == 0 && !m_Board[i].hasMine))) {
+      m_Board[i].revealed = true;
+      queue.push_back({currX - 1, currY});
+    }
+    // top
+    i = GameBoardUtil::translateCoordinate(currX, currY - 1, sizeX, sizeY);
+    if (i >= 0 && (!m_Board[i].revealed &&
+                   (m_Board[i].mineNumber == 0 && !m_Board[i].hasMine))) {
+      m_Board[i].revealed = true;
+      queue.push_back({currX, currY - 1});
+    }
+    // Right
+    i = GameBoardUtil::translateCoordinate(currX + 1, currY, sizeX, sizeY);
+    if (i >= 0 && (!m_Board[i].revealed &&
+                   (m_Board[i].mineNumber == 0 && !m_Board[i].hasMine))) {
+      m_Board[i].revealed = true;
+      queue.push_back({currX + 1, currY});
+    }
+    // bottom
+    i = GameBoardUtil::translateCoordinate(currX, currY + 1, sizeX, sizeY);
+    if (i >= 0 && (!m_Board[i].revealed &&
+                   (m_Board[i].mineNumber == 0 && !m_Board[i].hasMine))) {
+      m_Board[i].revealed = true;
+      queue.push_back({currX, currY + 1});
+    }
+    processed++;
+  }
 }
 
 namespace GameBoardUtil {
