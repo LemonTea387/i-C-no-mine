@@ -30,6 +30,7 @@ public:
   virtual void update(const SDL_Event &event) override;
 
 private:
+  std::vector<Text> m_Texts;
   std::vector<Tile> m_Board;
   std::pair<int, int> m_Dimension;
   SDL_Rect m_ActualBoardRect;

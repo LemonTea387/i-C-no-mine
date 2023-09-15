@@ -1,9 +1,11 @@
 #include "GameBoard.hpp"
 
+#include "AssetManager.hpp"
 #include "Scene/GameScene.hpp"
-#include <cstdlib> /* rand */
+#include <cstdlib>  /* rand */
 #include <stdlib.h> /* srand */
-#include <time.h>   /* time */
+#include <string>
+#include <time.h> /* time */
 
 GameBoard::GameBoard(int sizeX, int sizeY)
     : m_Dimension{sizeX, sizeY},
@@ -14,6 +16,14 @@ GameBoard::GameBoard(int sizeX, int sizeY)
   // Setup the board
   for (int i = 0; i < sizeX * sizeY; i++) {
     m_Board.push_back(Tile{false, false, 0});
+  }
+
+  AssetManager &assMan = AssetManager::GetInstance();
+  // Also secretly setup the texts, since.... we may use it.
+  for (int i = 0; i < 8; i++) {
+    m_Texts.push_back(Text{std::to_string(i + 1),
+                           *assMan.GetFont(GameAsset::Font::COMFORTAA),
+                           SDL_Color{0, 0, 0, 255}});
   }
 
   // Scatter Mines
@@ -82,7 +92,7 @@ void GameBoard::incrementNeighbours(int x, int y) {
     m_Board[i].mineNumber += 1;
 }
 
-void GameBoard::render(SDL_Renderer &renderer) const {
+void GameBoard::render(SDL_Renderer &renderer) {
   SDL_Rect tileRect{0, 0, TILE_SIZE_X, TILE_SIZE_Y};
   for (int i = 0; i < m_Board.size(); i++) {
     tileRect.x = (i % m_Dimension.first) * TILE_SIZE_X;
@@ -94,6 +104,12 @@ void GameBoard::render(SDL_Renderer &renderer) const {
       SDL_SetRenderDrawColor(&renderer, 128, 128, 128, 255);
     }
     SDL_RenderFillRect(&renderer, &tileRect);
+
+    if (tile.revealed && tile.mineNumber > 0) {
+      m_Texts[tile.mineNumber - 1].Render(renderer, tileRect);
+    }
+
+    // Draw Lines
     SDL_SetRenderDrawColor(&renderer, 32, 32, 32, 255);
     SDL_RenderDrawRect(&renderer, &tileRect);
   }
