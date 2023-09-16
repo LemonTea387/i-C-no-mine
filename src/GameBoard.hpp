@@ -34,10 +34,14 @@ private:
   std::vector<Text> m_Texts;
   std::vector<Tile> m_Board;
   std::pair<int, int> m_Dimension;
+  int m_MinesLeft;
+  int m_TilesLeft;
+  int m_FlagsLeft;
   SDL_Rect m_ActualBoardRect;
   void placeMines(int numMines);
   void incrementNeighbours(int x, int y);
   void revealAdjacentEmptyNeighbours(int x, int y);
+  void revealTile(int i);
 };
 
 namespace GameBoardUtil {

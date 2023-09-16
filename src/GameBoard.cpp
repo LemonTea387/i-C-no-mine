@@ -7,6 +7,7 @@
 #include <string>
 #include <time.h> /* time */
 
+#include <iostream>
 GameBoard::GameBoard(int sizeX, int sizeY)
     : m_Dimension{sizeX, sizeY},
       m_ActualBoardRect{gameboardArea.x, gameboardArea.y,
@@ -15,7 +16,7 @@ GameBoard::GameBoard(int sizeX, int sizeY)
       gameEnded{false} {
   // Setup the board
   for (int i = 0; i < sizeX * sizeY; i++) {
-    m_Board.push_back(Tile{false, false, 0});
+    m_Board.push_back(Tile{false, false, false, 0});
   }
 
   AssetManager &assMan = AssetManager::GetInstance();
@@ -28,6 +29,8 @@ GameBoard::GameBoard(int sizeX, int sizeY)
 
   // Scatter Mines
   placeMines(m_Board.size() / 5);
+  m_MinesLeft = m_Board.size() / 5;
+  m_FlagsLeft = m_Board.size() / 5;
 }
 
 GameBoard::~GameBoard() {}
@@ -36,10 +39,13 @@ void GameBoard::reset() {
   for (auto &tile : m_Board) {
     tile.revealed = false;
     tile.hasMine = false;
+    tile.mark = false;
     tile.mineNumber = 0;
   }
   // Scatter Mines
   placeMines(m_Board.size() / 5);
+  m_MinesLeft = m_Board.size() / 5;
+  m_FlagsLeft = m_Board.size() / 5;
   gameEnded = false;
 }
 
@@ -100,8 +106,13 @@ void GameBoard::render(SDL_Renderer &renderer) {
     auto &tile = m_Board[i];
     if (tile.revealed) {
       SDL_SetRenderDrawColor(&renderer, 224, 224, 224, 255);
+    } else if (tile.mark) {
+      SDL_SetRenderDrawColor(&renderer, 0, 0, 255, 255);
     } else {
       SDL_SetRenderDrawColor(&renderer, 128, 128, 128, 255);
+    }
+    if (tile.hasMine) {
+      SDL_SetRenderDrawColor(&renderer, 255, 0, 0, 255);
     }
     SDL_RenderFillRect(&renderer, &tileRect);
 
@@ -128,18 +139,46 @@ void GameBoard::update(const SDL_Event &event) {
       event.button.x, event.button.y, TILE_SIZE_X, TILE_SIZE_Y,
       m_ActualBoardRect);
   // y * DimX + x
-  auto &tile = m_Board[tileCoord.second * m_Dimension.first + tileCoord.first];
+  int i = tileCoord.second * m_Dimension.first + tileCoord.first;
+  auto &tile = m_Board[i];
 
-  // Different cases of the tile
-  if (tile.hasMine) {
+  // Left click
+  if (event.button.button == 1) {
+    // Do nothing when it is marked.
+    if (tile.mark)
+      return;
+    if (tile.hasMine) {
+      gameEnded = true;
+      return;
+    }
+    if (tile.mineNumber == 0) {
+      // We wanna reveal the adjacent 'empty' tiles
+      revealAdjacentEmptyNeighbours(tileCoord.first, tileCoord.second);
+    }
+    revealTile(i);
+  }
+  // Right click
+  else if (event.button.button == 3) {
+    // Unmark
+    if (tile.mark) {
+      tile.mark = false;
+      m_FlagsLeft++;
+      return;
+    }
+
+    // Marking
+    if (m_FlagsLeft == 0)
+      return;
+    if (tile.hasMine) {
+      m_MinesLeft--;
+    }
+    tile.mark = true;
+    m_FlagsLeft--;
+  }
+
+  if (m_MinesLeft == 0 || m_TilesLeft == m_MinesLeft) {
     gameEnded = true;
-    return;
   }
-  if (tile.mineNumber == 0) {
-    // We wanna reveal the adjacent 'empty' tiles
-    revealAdjacentEmptyNeighbours(tileCoord.first, tileCoord.second);
-  }
-  tile.revealed = true;
 }
 
 void GameBoard::revealAdjacentEmptyNeighbours(int x, int y) {
@@ -154,28 +193,28 @@ void GameBoard::revealAdjacentEmptyNeighbours(int x, int y) {
   i = GameBoardUtil::translateCoordinate(x - 1, y, sizeX, sizeY);
   if (i >= 0 && (!m_Board[i].revealed &&
                  (m_Board[i].mineNumber == 0 && !m_Board[i].hasMine))) {
-    m_Board[i].revealed = true;
+    revealTile(i);
     queue.push_back({x - 1, y});
   }
   // top
   i = GameBoardUtil::translateCoordinate(x, y - 1, sizeX, sizeY);
   if (i >= 0 && (!m_Board[i].revealed &&
                  (m_Board[i].mineNumber == 0 && !m_Board[i].hasMine))) {
-    m_Board[i].revealed = true;
+    revealTile(i);
     queue.push_back({x, y - 1});
   }
   // Right
   i = GameBoardUtil::translateCoordinate(x + 1, y, sizeX, sizeY);
   if (i >= 0 && (!m_Board[i].revealed &&
                  (m_Board[i].mineNumber == 0 && !m_Board[i].hasMine))) {
-    m_Board[i].revealed = true;
+    revealTile(i);
     queue.push_back({x + 1, y});
   }
   // bottom
   i = GameBoardUtil::translateCoordinate(x, y + 1, sizeX, sizeY);
   if (i >= 0 && (!m_Board[i].revealed &&
                  (m_Board[i].mineNumber == 0 && !m_Board[i].hasMine))) {
-    m_Board[i].revealed = true;
+    revealTile(i);
     queue.push_back({x, y + 1});
   }
 
@@ -188,32 +227,37 @@ void GameBoard::revealAdjacentEmptyNeighbours(int x, int y) {
     i = GameBoardUtil::translateCoordinate(currX - 1, currY, sizeX, sizeY);
     if (i >= 0 && (!m_Board[i].revealed &&
                    (m_Board[i].mineNumber == 0 && !m_Board[i].hasMine))) {
-      m_Board[i].revealed = true;
+      revealTile(i);
       queue.push_back({currX - 1, currY});
     }
     // top
     i = GameBoardUtil::translateCoordinate(currX, currY - 1, sizeX, sizeY);
     if (i >= 0 && (!m_Board[i].revealed &&
                    (m_Board[i].mineNumber == 0 && !m_Board[i].hasMine))) {
-      m_Board[i].revealed = true;
+      revealTile(i);
       queue.push_back({currX, currY - 1});
     }
     // Right
     i = GameBoardUtil::translateCoordinate(currX + 1, currY, sizeX, sizeY);
     if (i >= 0 && (!m_Board[i].revealed &&
                    (m_Board[i].mineNumber == 0 && !m_Board[i].hasMine))) {
-      m_Board[i].revealed = true;
+      revealTile(i);
       queue.push_back({currX + 1, currY});
     }
     // bottom
     i = GameBoardUtil::translateCoordinate(currX, currY + 1, sizeX, sizeY);
     if (i >= 0 && (!m_Board[i].revealed &&
                    (m_Board[i].mineNumber == 0 && !m_Board[i].hasMine))) {
-      m_Board[i].revealed = true;
+      revealTile(i);
       queue.push_back({currX, currY + 1});
     }
     processed++;
   }
+}
+
+void GameBoard::revealTile(int i) {
+  m_Board[i].revealed = true;
+  m_TilesLeft--;
 }
 
 namespace GameBoardUtil {

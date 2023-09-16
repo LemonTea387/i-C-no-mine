@@ -5,6 +5,7 @@
 typedef struct {
   bool hasMine;
   bool revealed;
+  bool mark;
   uint8_t mineNumber;
 } Tile;
 
