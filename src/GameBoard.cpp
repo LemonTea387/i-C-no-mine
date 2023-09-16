@@ -167,7 +167,7 @@ void GameBoard::update(const SDL_Event &event) {
     }
 
     // Marking
-    if (m_FlagsLeft == 0)
+    if (m_FlagsLeft == 0 || tile.revealed)
       return;
     if (tile.hasMine) {
       m_MinesLeft--;
