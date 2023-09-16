@@ -3,9 +3,7 @@ Just a minesweeper clone to practice sdl2, not too fancy.
 
 ## Building
 ```
-cmake -DCMAKE_INSTALL_PREFIX="[SDL_PATH]\cmake;[SDL_image_PATH]\cmake" -B .\build
+cmake -B .\build
 ```
-If you're on MinGW + clangd
-```
-cmake -DCMAKE_INSTALL_PREFIX="[SDL_PATH]\cmake;[SDL_image_PATH]\cmake" -DCMAKE_EXPORT_COMPILE_COMMANDS=1 -G Ninja -B .\build
-```
+Tested on Windows 10, Visual Studio 17, 2022.
+But should work on Linux (Hopefully...)
