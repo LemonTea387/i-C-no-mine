@@ -111,9 +111,9 @@ void GameBoard::render(SDL_Renderer &renderer) {
     } else {
       SDL_SetRenderDrawColor(&renderer, 128, 128, 128, 255);
     }
-    if (tile.hasMine) {
-      SDL_SetRenderDrawColor(&renderer, 255, 0, 0, 255);
-    }
+    // if (tile.hasMine) {
+    //   SDL_SetRenderDrawColor(&renderer, 255, 0, 0, 255);
+    // }
     SDL_RenderFillRect(&renderer, &tileRect);
 
     if (tile.revealed && tile.mineNumber > 0) {
@@ -191,29 +191,25 @@ void GameBoard::revealAdjacentEmptyNeighbours(int x, int y) {
   // The 4 directions first
   // Left
   i = GameBoardUtil::translateCoordinate(x - 1, y, sizeX, sizeY);
-  if (i >= 0 && (!m_Board[i].revealed &&
-                 (m_Board[i].mineNumber == 0 && !m_Board[i].hasMine))) {
+  if (i >= 0 && (!m_Board[i].revealed && (!m_Board[i].hasMine))) {
     revealTile(i);
     queue.push_back({x - 1, y});
   }
   // top
   i = GameBoardUtil::translateCoordinate(x, y - 1, sizeX, sizeY);
-  if (i >= 0 && (!m_Board[i].revealed &&
-                 (m_Board[i].mineNumber == 0 && !m_Board[i].hasMine))) {
+  if (i >= 0 && (!m_Board[i].revealed && (!m_Board[i].hasMine))) {
     revealTile(i);
     queue.push_back({x, y - 1});
   }
   // Right
   i = GameBoardUtil::translateCoordinate(x + 1, y, sizeX, sizeY);
-  if (i >= 0 && (!m_Board[i].revealed &&
-                 (m_Board[i].mineNumber == 0 && !m_Board[i].hasMine))) {
+  if (i >= 0 && (!m_Board[i].revealed && (!m_Board[i].hasMine))) {
     revealTile(i);
     queue.push_back({x + 1, y});
   }
   // bottom
   i = GameBoardUtil::translateCoordinate(x, y + 1, sizeX, sizeY);
-  if (i >= 0 && (!m_Board[i].revealed &&
-                 (m_Board[i].mineNumber == 0 && !m_Board[i].hasMine))) {
+  if (i >= 0 && (!m_Board[i].revealed && (!m_Board[i].hasMine))) {
     revealTile(i);
     queue.push_back({x, y + 1});
   }
@@ -225,29 +221,25 @@ void GameBoard::revealAdjacentEmptyNeighbours(int x, int y) {
     currY = queue[processed].second;
     // Left
     i = GameBoardUtil::translateCoordinate(currX - 1, currY, sizeX, sizeY);
-    if (i >= 0 && (!m_Board[i].revealed &&
-                   (m_Board[i].mineNumber == 0 && !m_Board[i].hasMine))) {
+    if (i >= 0 && (!m_Board[i].revealed && (!m_Board[i].hasMine))) {
       revealTile(i);
       queue.push_back({currX - 1, currY});
     }
     // top
     i = GameBoardUtil::translateCoordinate(currX, currY - 1, sizeX, sizeY);
-    if (i >= 0 && (!m_Board[i].revealed &&
-                   (m_Board[i].mineNumber == 0 && !m_Board[i].hasMine))) {
+    if (i >= 0 && (!m_Board[i].revealed && (!m_Board[i].hasMine))) {
       revealTile(i);
       queue.push_back({currX, currY - 1});
     }
     // Right
     i = GameBoardUtil::translateCoordinate(currX + 1, currY, sizeX, sizeY);
-    if (i >= 0 && (!m_Board[i].revealed &&
-                   (m_Board[i].mineNumber == 0 && !m_Board[i].hasMine))) {
+    if (i >= 0 && (!m_Board[i].revealed && (!m_Board[i].hasMine))) {
       revealTile(i);
       queue.push_back({currX + 1, currY});
     }
     // bottom
     i = GameBoardUtil::translateCoordinate(currX, currY + 1, sizeX, sizeY);
-    if (i >= 0 && (!m_Board[i].revealed &&
-                   (m_Board[i].mineNumber == 0 && !m_Board[i].hasMine))) {
+    if (i >= 0 && (!m_Board[i].revealed && (!m_Board[i].hasMine))) {
       revealTile(i);
       queue.push_back({currX, currY + 1});
     }
